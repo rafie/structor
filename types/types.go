@@ -17,6 +17,7 @@ type Configuration struct {
 	RequirementsURL        string     `long:"rqts-url" description:"Use this requirements.txt to merge with the current requirements.txt. Can be a file path."`
 	NoCache                bool       `long:"no-cache" description:"Set to 'true' to disable the Docker build cache."`
 	ForceEditionURI        bool       `long:"force-edit-url" description:"Add a dedicated edition URL for each version."`
+	Workdir                string     `short:"w" long:"workdir" description:"working directory for temporary files (default: /tmp)"`
 }
 
 // MenuFiles menu template files references

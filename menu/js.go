@@ -106,7 +106,9 @@ func buildVersions(currentVersion string, branches []string, latestTagName strin
 		default:
 			simpleVersion, err := version.NewVersion(versionName)
 			if err != nil {
-				return nil, err
+				// return nil, err
+				//@@ check configuration "skip-bad-branches"
+				continue
 			}
 
 			v := optionVersion{

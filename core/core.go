@@ -28,11 +28,14 @@ const (
 
 // Execute core process
 func Execute(config *types.Configuration) error {
-	workDir, err := ioutil.TempDir("", "structor")
-	if err != nil {
-		return err
+	workDir := config.Workdir
+	var err error = nil
+	if workDir == "" {
+		workDir, err = ioutil.TempDir("", "structor")
+		if err != nil {
+			return err
+		}
 	}
-
 	defer func() {
 		if err = cleanAll(workDir, config.Debug); err != nil {
 			log.Println("[WARN] error during cleaning: ", err)

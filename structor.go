@@ -51,6 +51,7 @@ func main() {
 	flags.StringVarP(&cfg.RepositoryName, "repo-name", "r", "", "Repository name. [required]")
 
 	flags.BoolVar(&cfg.Debug, "debug", false, "Debug mode.")
+	flags.StringVarP(&cfg.Workdir, "workdir", "w", "", "working directory for temporary files (default: /tmp)")
 
 	flags.StringVarP(&cfg.DockerfileURL, "dockerfile-url", "d", "", "Use this Dockerfile when --dockerfile-name is not found. Can be a file path. [required]")
 	flags.StringVar(&cfg.DockerfileURL, "dockerfile-name", defaultDockerfileName, "Search and use this Dockerfile in the repository (in './docs/' or in './') for building documentation.")
