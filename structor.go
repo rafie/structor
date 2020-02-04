@@ -57,6 +57,7 @@ func main() {
 	flags.StringVar(&cfg.DockerfileURL, "dockerfile-name", defaultDockerfileName, "Search and use this Dockerfile in the repository (in './docs/' or in './') for building documentation.")
 	flags.StringVar(&cfg.DockerImageName, "image-name", defaultDockerImageName, "Docker image name.")
 	flags.BoolVar(&cfg.NoCache, "no-cache", false, "Set to 'true' to disable the Docker build cache.")
+	flags.BoolVar(&cfg.NoDockerVolume, "no-volume", false, "Do not use Docker volumes.")
 
 	flags.StringVar(&cfg.ExperimentalBranchName, "exp-branch", "", "Build a branch as experimental.")
 	flags.StringSliceVar(&cfg.ExcludedBranches, "exclude", nil, "Exclude branches from the documentation generation.")

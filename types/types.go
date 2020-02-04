@@ -18,6 +18,7 @@ type Configuration struct {
 	NoCache                bool       `long:"no-cache" description:"Set to 'true' to disable the Docker build cache."`
 	ForceEditionURI        bool       `long:"force-edit-url" description:"Add a dedicated edition URL for each version."`
 	Workdir                string     `short:"w" long:"workdir" description:"working directory for temporary files (default: /tmp)"`
+	NoDockerVolume         bool       `long:"no-volume" description:"Do not use Docker volumes."`
 }
 
 // MenuFiles menu template files references

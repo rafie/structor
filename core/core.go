@@ -244,19 +244,62 @@ func buildDocumentation(branches []string, versionsInfo types.VersionsInformatio
 		return err
 	}
 
-	args := []string{"run", "--rm", "-v", versionsInfo.CurrentPath + ":/mkdocs"}
-	if _, err = os.Stat(filepath.Join(versionsInfo.CurrentPath, ".env")); err == nil {
-		args = append(args, fmt.Sprintf("--env-file=%s", filepath.Join(versionsInfo.CurrentPath, ".env")))
-	}
-	args = append(args, dockerImageFullName, "mkdocs", "build")
+	if !config.NoDockerVolume {
+		args := []string{"run", "--rm", "-v", versionsInfo.CurrentPath + ":/mkdocs"}
+		if _, err = os.Stat(filepath.Join(versionsInfo.CurrentPath, ".env")); err == nil {
+			args = append(args, fmt.Sprintf("--env-file=%s", filepath.Join(versionsInfo.CurrentPath, ".env")))
+		}
+		args = append(args, dockerImageFullName, "mkdocs", "build")
 
-	// Run image
-	output, err := docker.Exec(config.Debug, args...)
-	if err != nil {
-		log.Println(output)
-		return err
-	}
+		// Run image
+		output, err := docker.Exec(config.Debug, args...)
+		if err != nil {
+			log.Println(output)
+			return err
+		}
+	} else {
+		args := []string{"create", "-v", "/mkdocs", "--name", "vols", "alpine:3.4", "/bin/true"}
+		output, err := docker.Exec(config.Debug, args...)
+		if err != nil {
+			log.Println(output)
+			return err
+		}
 
+		args = []string{"cp", versionsInfo.CurrentPath + "/.", "vols:/mkdocs"}
+		output, err = docker.Exec(config.Debug, args...)
+		if err != nil {
+			log.Println(output)
+			return err
+		}
+
+		args = []string{"run", "--rm", "--volumes-from", "vols"}
+		if _, err = os.Stat(filepath.Join(versionsInfo.CurrentPath, ".env")); err == nil {
+			args = append(args, fmt.Sprintf("--env-file=%s", filepath.Join(versionsInfo.CurrentPath, ".env")))
+		}
+		args = append(args, dockerImageFullName, "mkdocs", "build")
+
+		// Run image
+		output, err = docker.Exec(config.Debug, args...)
+		if err != nil {
+			log.Println(output)
+			return err
+		}
+
+		args = []string{"cp", "vols:/mkdocs/site", versionsInfo.CurrentPath + "/"}
+		output, err = docker.Exec(config.Debug, args...)
+		if err != nil {
+			log.Println(output)
+			return err
+		}
+
+		args = []string{"rm", "vols"}
+		output, err = docker.Exec(config.Debug, args...)
+		if err != nil {
+			log.Println(output)
+			return err
+		}
+	}
+	
 	return nil
 }
 

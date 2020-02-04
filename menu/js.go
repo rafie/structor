@@ -3,6 +3,7 @@ package menu
 import (
 	"fmt"
 	"os"
+	"log" 
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -108,6 +109,7 @@ func buildVersions(currentVersion string, branches []string, latestTagName strin
 			if err != nil {
 				// return nil, err
 				//@@ check configuration "skip-bad-branches"
+				log.Println("[WARN] bad version: ", versionName)
 				continue
 			}
 
